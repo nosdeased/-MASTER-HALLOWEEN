@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MASTER HALLOWEEN — Contagem Regressiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0706;
+    --bg2: #1a0a08;
+    --red: #8b0000;
+    --red-bright: #c81414;
+    --cream: #ede3d3;
+    --line: rgba(237,227,211,0.25);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(139,0,0,0.55) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 15%, rgba(139,0,0,0.35) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 100%, rgba(80,0,0,0.5) 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg2) 0%, #0a0403 55%, #050202 100%);
+    color: var(--cream);
+    font-family: 'Courier Prime', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: calc(env(safe-area-inset-top, 0px) + 48px) 24px calc(env(safe-area-inset-bottom, 0px) + 48px);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* grunge noise overlay */
+  .noise {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tag {
+    letter-spacing: 6px;
+    font-size: 13px;
+    color: var(--cream);
+    opacity: 0.75;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 18px;
+    margin-bottom: 40px;
+  }
+
+  h1.top {
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    font-size: clamp(38px, 11vw, 58px);
+    letter-spacing: 2px;
+    margin: 0;
+    color: var(--cream);
+    text-shadow: 0 0 18px rgba(0,0,0,0.6), 0 2px 0 rgba(0,0,0,0.4);
+    line-height: 0.95;
+  }
+
+  h2.drip {
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    font-size: clamp(30px, 10vw, 50px);
+    margin: 4px 0 36px;
+    color: var(--red-bright);
+    text-shadow: 0 0 22px rgba(200,20,20,0.55), 0 3px 6px rgba(0,0,0,0.7);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 10px;
+    margin: 8px 0 36px;
+    flex-wrap: nowrap;
+  }
+  .unit {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--line);
+    padding: 14px 10px;
+    min-width: 68px;
+    backdrop-filter: blur(1px);
+  }
+  .unit .num {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(26px, 7vw, 36px);
+    color: var(--cream);
+    display: block;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(200,20,20,0.4);
+  }
+  .unit .lbl {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: 0.65;
+    margin-top: 6px;
+  }
+
+  .warning {
+    font-size: 14px;
+    line-height: 1.7;
+    letter-spacing: 0.5px;
+    color: var(--cream);
+    opacity: 0.9;
+    margin-bottom: 34px;
+    max-width: 380px;
+  }
+  .warning b { color: var(--red-bright); }
+
+  .cta {
+    display: inline-block;
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 14px;
+    color: var(--bg);
+    background: var(--cream);
+    padding: 16px 34px;
+    text-decoration: none;
+    border: 1px solid var(--cream);
+    transition: background 0.2s, color 0.2s, opacity 0.2s;
+  }
+  .cta:active { opacity: 0.8; }
+
+  .footer-tag {
+    margin-top: 44px;
+    font-size: 11px;
+    letter-spacing: 5px;
+    opacity: 0.5;
+  }
+
+  .price-line {
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    margin-top: 10px;
+  }
+  .price-line .old { text-decoration: line-through; opacity: 0.6; margin-right: 8px; }
+  .price-line .new { color: var(--red-bright); font-weight: 700; }
+
+  /* MASTER HALLOWEEN bottom lockup */
+  .lockup {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .lockup .master {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(30px, 9vw, 44px);
+    letter-spacing: 3px;
+    color: var(--cream);
+  }
+  .lockup .halloween {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(24px, 7vw, 34px);
+    color: var(--red-bright);
+    margin-top: -6px;
+    text-shadow: 0 0 16px rgba(200,20,20,0.5);
+    letter-spacing: 2px;
+  }
+
+  /* EXPIRED STATE */
+  .expired-stamp {
+    display: none;
+  }
+  body.expired .live-state { display: none; }
+  body.expired .expired-stamp {
+    display: block;
+  }
+  .stamp-box {
+    border: 3px solid var(--red-bright);
+    color: var(--red-bright);
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 4px;
+    font-size: clamp(28px, 9vw, 42px);
+    padding: 18px 22px;
+    transform: rotate(-4deg);
+    margin: 10px 0 30px;
+    text-shadow: 0 0 14px rgba(200,20,20,0.5);
+    box-shadow: 0 0 0 4px rgba(200,20,20,0.08);
+  }
+  .expired-text {
+    font-size: 14px;
+    line-height: 1.8;
+    opacity: 0.85;
+    max-width: 380px;
+    margin-bottom: 10px;
+  }
+  .cta-disabled {
+    display: inline-block;
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 13px;
+    color: rgba(237,227,211,0.4);
+    background: transparent;
+    padding: 16px 34px;
+    border: 1px solid rgba(237,227,211,0.25);
+  }
+</style>
+</head>
+<body>
+  <svg class="noise" xmlns="http://www.w3.org/2000/svg">
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter>
+    <rect width="100%" height="100%" filter="url(#n)"/>
+  </svg>
+
+  <div class="content">
+    <div class="tag">PRIVATE EVENT</div>
+
+    <div class="live-state">
+      <h1 class="top">CONTAGEM</h1>
+      <h2 class="drip">REGRESSIVA</h2>
+
+      <div class="countdown" id="countdown">
+        <div class="unit"><span class="num" id="d">--</span><span class="lbl">DIAS</span></div>
+        <div class="unit"><span class="num" id="h">--</span><span class="lbl">HORAS</span></div>
+        <div class="unit"><span class="num" id="m">--</span><span class="lbl">MIN</span></div>
+        <div class="unit"><span class="num" id="s">--</span><span class="lbl">SEG</span></div>
+      </div>
+
+      <div class="warning">
+        O valor de acesso sobe em <b>05.10</b>.<br>
+        Confirme antes disso e garanta sua entrada pelo valor atual.<br>
+        Seu nome ainda não consta como confirmado.
+      </div>
+
+      <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLScznLOwX86eaCN4dBBTlC8dRPPuFngKt024JtiDYYF1prs88w/viewform?usp=sharing&ouid=116690675021360478019" target="_blank" rel="noopener">CONFIRMAR AGORA</a>
+      <div class="price-line"><span class="new">R$ 10,00</span> até 05.10</div>
+    </div>
+
+    <div class="expired-stamp">
+      <h1 class="top">CONTAGEM</h1>
+      <h2 class="drip">REGRESSIVA</h2>
+      <div class="stamp-box">VALOR<br>ATUALIZADO</div>
+      <div class="expired-text">
+        O prazo promocional foi encerrado em <b style="color:var(--red-bright)">05.10</b>.<br>
+        A partir de agora, a confirmação custa mais.
+      </div>
+      <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLScznLOwX86eaCN4dBBTlC8dRPPuFngKt024JtiDYYF1prs88w/viewform?usp=sharing&ouid=116690675021360478019" target="_blank" rel="noopener">CONFIRMAR AGORA</a>
+      <div class="price-line"><span class="old">R$ 10,00</span><span class="new">R$ 25,00</span></div>
+    </div>
+
+    <div class="lockup">
+      <div class="master">MASTER</div>
+      <div class="halloween">HALLOWEEN</div>
+    </div>
+
+    <div class="footer-tag">SIGILO ABSOLUTO</div>
+  </div>
+
+<script>
+  // Deadline: 05/10/2026 23:59:59 in America/Sao_Paulo (-03:00)
+  var deadline = new Date("2026-10-05T23:59:59-03:00").getTime();
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    var now = Date.now();
+    var diff = deadline - now;
+
+    if (diff <= 0) {
+      document.body.classList.add('expired');
+      return;
+    }
+
+    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    var m = Math.floor((diff / (1000 * 60)) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('d').textContent = pad(d);
+    document.getElementById('h').textContent = pad(h);
+    document.getElementById('m').textContent = pad(m);
+    document.getElementById('s').textContent = pad(s);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
